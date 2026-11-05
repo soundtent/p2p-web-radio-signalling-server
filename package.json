@@ -1,0 +1,17 @@
+{
+  "name": "p2p-web-radio-signalling-server",
+  "version": "1.0.0",
+  "author": "Max Baraitser Smith",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "type": "module",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "geoip-lite": "^2.0.3",
+    "nodemon": "^1.14.10",
+    "socket.io": "^4.8.4"
+  }
+}
