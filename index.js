@@ -35,15 +35,29 @@ function sendPeers() {
 io.on('connection', (socket) => {
     console.log(`Connected: ${socket.id}`);
 
+    //get client ip from the x-forwarded-for header (https://socket.io/how-to/get-the-ip-address-of-the-client)
+    //forwarded by nginx
+    let clientIp = socket.handshake.headers["x-forwarded-for"].split(",")[0];
+
     let newPeer = {
         id: socket.id,
-        ip: socket.handshake.address,
-        geolocation: "country, region, city",
+        ip: clientIp,
+        geolocation: "unknown",
     }
 
-    var geo = geoip.lookup(socket.handshake.address);
+    var geo = geoip.lookup(clientIp);
     if (geo) {
-        newPeer.geolocation = geo.country+", "+geo.region+", "+geo.city;
+        let locationParts = []
+        if (geo.country != "") {
+           locationParts.push(geo.country);
+        }
+        if (geo.region != "") {
+            locationParts.push(geo.region);
+        }
+        if (geo.city != "") {
+            locationParts.push(geo.city);
+        }
+        newPeer.geolocation = locationParts.join(", ")
     }
 
     peers.push(newPeer);
