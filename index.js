@@ -72,22 +72,22 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('whoami', peer);
     });
     
-    socket.on('offer', ({ targetPeerId, sessionDesc }) => {
-        console.log(`Received offer from ${socket.id} to ${targetPeerId}`);
-        if (peers.some(e => e.id == targetPeerId) ) {
-            io.to(targetPeerId).emit('offer', { fromId: socket.id, sessionDesc: sessionDesc});
+    socket.on('offer', ({ peerId, sessionDesc }) => {
+        console.log(`Received offer from ${socket.id} to ${peerId}`);
+        if (peers.some(e => e.id == peerId) ) {
+            io.to(peerId).emit('offer', { fromId: socket.id, sessionDesc: sessionDesc});
         }
     });
 
-    socket.on('answer', ({ targetPeerId, sessionDesc }) => {
-        console.log(`Received answer from ${socket.id} to ${targetPeerId}`);
-        if (peers.some(e => e.id == targetPeerId) ) {
-            io.to(targetPeerId).emit('answer', { fromId: socket.id, sessionDesc: sessionDesc});
+    socket.on('answer', ({ peerId, sessionDesc }) => {
+        console.log(`Received answer from ${socket.id} to ${peerId}`);
+        if (peers.some(e => e.id == peerId) ) {
+            io.to(peerId).emit('answer', { fromId: socket.id, sessionDesc: sessionDesc});
         }
     });
 
-    socket.on('ice-candidate', ({ targetPeerId, candidate }) => {
-        io.to(targetPeerId).emit('ice-candidate', { fromId: socket.id, candidate: candidate});
+    socket.on('ice-candidate', ({ peerId, fromIsSender, candidate }) => {
+        io.to(peerId).emit('ice-candidate', { fromId: socket.id, fromIsSender: fromIsSender, candidate: candidate});
     });
 
     socket.on('disconnect', () => {
